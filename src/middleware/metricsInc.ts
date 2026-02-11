@@ -6,8 +6,6 @@ export function middlewareMetricsInc(
   res: Response,
   next: NextFunction,
 ) {
-  res.on("finish", () => {
-    config.fileserverHits += 1;
-  });
+  config.fileserverHits++;
   next();
 }

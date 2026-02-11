@@ -8,13 +8,11 @@ import { middlewareMetricsInc } from "./middleware/metricsInc.js";
 const app = express();
 const PORT = 8080;
 app.use(logResponses);
+app.use("/app", middlewareMetricsInc, express.static("./src/app"));
+
 app.get("/api/healthz", handlerReadiness);
-app.get("/api/metrics", handlerMetrics);
-app.get("/api/reset", handlerMetricsReset);
-app.use(middlewareMetricsInc);
-app.use("/app", express.static("./src/app"));
-app.use(express.static("./app"));
-app.use(express.static("./app/assets/logo.png"));
+app.get("/admin/metrics", handlerMetrics);
+app.post("/admin/reset", handlerMetricsReset);
 
 app.listen(PORT, () => {
   console.log(`Server is running at http://localhost:${PORT}`);
