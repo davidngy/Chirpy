@@ -6,8 +6,15 @@ import { logResponses } from "./middleware/logResponses.js";
 import { middlewareMetricsInc } from "./middleware/metricsInc.js";
 import { handlerValidateChirp } from "./handler/handlerValidateChirp.js";
 import { errorHandler } from "./middleware/errorHandler.js";
+import postgres from "postgres";
+import { migrate } from "drizzle-orm/postgres-js/migrator";
+import { drizzle } from "drizzle-orm/postgres-js";
+import { config } from "./config.js";
+
+const migrationClient = postgres(config.db.url, { max: 1 });
+await migrate(drizzle(migrationClient), config.db.migrationConfig);
 const app = express();
-const PORT = 8080;
+
 app.use(express.json());
 app.use(logResponses);
 app.use("/app", middlewareMetricsInc, express.static("./src/app"));
@@ -15,17 +22,17 @@ app.use("/app", middlewareMetricsInc, express.static("./src/app"));
 app.get("/api/healthz", async (req, res, next) => {
   Promise.resolve(handlerReadiness(req, res)).catch(next);
 });
-app.get("/admin/metrics",  async (req, res, next) => {
+app.get("/admin/metrics", async (req, res, next) => {
   Promise.resolve(handlerMetrics(req, res)).catch(next);
 });
-app.post("/admin/reset",  async (req, res, next) => {
+app.post("/admin/reset", async (req, res, next) => {
   Promise.resolve(handlerMetricsReset(req, res)).catch(next);
 });
-app.post("/api/validate_chirp",  async (req, res, next) => {
+app.post("/api/validate_chirp", async (req, res, next) => {
   Promise.resolve(handlerValidateChirp(req, res)).catch(next);
 });
 
 app.use(errorHandler);
-app.listen(PORT, () => {
-  console.log(`Server is running at http://localhost:${PORT}`);
+app.listen(config.api.port, () => {
+  console.log(`Server is running at http://localhost:${config.api.port}`);
 });
