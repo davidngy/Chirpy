@@ -5,6 +5,7 @@ import { handlerMetricsReset } from "./handler/handlerMetricsReset.js";
 import { logResponses } from "./middleware/logResponses.js";
 import { middlewareMetricsInc } from "./middleware/metricsInc.js";
 import { handlerValidateChirp } from "./handler/handlerValidateChirp.js";
+import { handlerCreateUser } from "./handler/handlerCreateUser.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 import postgres from "postgres";
 import { migrate } from "drizzle-orm/postgres-js/migrator";
@@ -30,6 +31,10 @@ app.post("/admin/reset", async (req, res, next) => {
 });
 app.post("/api/validate_chirp", async (req, res, next) => {
   Promise.resolve(handlerValidateChirp(req, res)).catch(next);
+});
+
+app.post("/api/users", async (req, res, next) => {
+  Promise.resolve(handlerCreateUser(req, res)).catch(next);
 });
 
 app.use(errorHandler);

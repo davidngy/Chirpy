@@ -14,6 +14,7 @@ type APIConfig = {
 type DBCOnfig = {
   url: string;
   migrationConfig: MigrationConfig;
+  platform: string
 };
 
 const migrationConfig: MigrationConfig = {
@@ -26,7 +27,7 @@ function envOrThrow(key: string) {
   if (!env[key]) {
     throw new Error(`Missing environment variable: ${key}`);
   }
-  return env.key;
+  return env[key];
 }
 
 export const config: Config = {
@@ -35,7 +36,8 @@ export const config: Config = {
     port: Number(envOrThrow("PORT")),
   },
   db: {
-    url: envOrThrow("DB_URL"),
+    url: envOrThrow("DB_URL") as string,
     migrationConfig: migrationConfig,
+    platform: envOrThrow("PLATFORM") as string,
   },
 };
