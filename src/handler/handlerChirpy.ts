@@ -1,6 +1,6 @@
 import { Response, Request } from "express";
 import { BadRequestError } from "../error/httpErrors.js";
-import { createChirpy } from "../db/queries/chirpy.js";
+import { createChirpy, getAllChipies, getChirp } from "../db/queries/chirpy.js";
 
 function validateChirp(chirp: string) {
   const forbidden = ["kerfuffle", "sharbert", "fornax"];
@@ -28,8 +28,22 @@ export async function handlerCreateChirp(req: Request, res: Response) {
   const params: parameters = req.body;
   const cleandeChirp = validateChirp(params.body)
   const userId = params.userId
-  console.log(cleandeChirp)
   const response = await createChirpy({body: cleandeChirp, userId: userId})
-  console.log(response)
-  return res.status(201).json(response);
+  res.status(201).json(response);
+}
+
+export async function handlerGetChirps(req: Request, res: Response) {
+  const chirpies = await getAllChipies()
+  res.status(200).json(chirpies);
+}
+
+export async function handlerGetChirp(req: Request, res: Response) {
+  const chirpId = req.params.id as string
+  const chirp = await getChirp(chirpId)
+  if(!chirp.length) {
+    return res.status(400).json({
+      error: "Invalid Chirp",
+    });
+  }
+  res.status(200).json(chirp[0])
 }
