@@ -8,6 +8,20 @@
       "when": 1771429921879,
       "tag": "0000_jittery_blink",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1771782305416,
+      "tag": "0001_majestic_black_tarantula",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1771782746275,
+      "tag": "0002_melted_senator_kelly",
+      "breakpoints": true
     }
   ]
 }

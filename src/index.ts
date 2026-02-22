@@ -4,7 +4,7 @@ import { handlerMetrics } from "./handler/handlerMetrics.js";
 import { handlerMetricsReset } from "./handler/handlerMetricsReset.js";
 import { logResponses } from "./middleware/logResponses.js";
 import { middlewareMetricsInc } from "./middleware/metricsInc.js";
-import { handlerValidateChirp } from "./handler/handlerValidateChirp.js";
+import { handlerCreateChirp } from "./handler/handlerChirpy.js";
 import { handlerCreateUser } from "./handler/handlerCreateUser.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 import postgres from "postgres";
@@ -29,8 +29,8 @@ app.get("/admin/metrics", async (req, res, next) => {
 app.post("/admin/reset", async (req, res, next) => {
   Promise.resolve(handlerMetricsReset(req, res)).catch(next);
 });
-app.post("/api/validate_chirp", async (req, res, next) => {
-  Promise.resolve(handlerValidateChirp(req, res)).catch(next);
+app.post("/api/chirps", async (req, res, next) => {
+  Promise.resolve(handlerCreateChirp(req, res)).catch(next);
 });
 
 app.post("/api/users", async (req, res, next) => {
