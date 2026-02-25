@@ -25,3 +25,4 @@ export async function getChirp(chirpId: string) {
     .where(eq(chirpies.id, chirpId))
   return chirp
 }
+
