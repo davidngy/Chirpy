@@ -17,33 +17,33 @@ function validateChirp(chirp: string) {
     }
   }
   const cleanedBody = cleanedBodyArr.join(" ");
-  return cleanedBody
+  return cleanedBody;
 }
 
 export async function handlerCreateChirp(req: Request, res: Response) {
   type parameters = {
     body: string;
-    userId: string
+    userId: string;
   };
   const params: parameters = req.body;
-  const cleandeChirp = validateChirp(params.body)
-  const userId = params.userId
-  const response = await createChirpy({body: cleandeChirp, userId: userId})
+  const cleandeChirp = validateChirp(params.body);
+  const userId = params.userId;
+  const response = await createChirpy({ body: cleandeChirp, userId: userId });
   res.status(201).json(response);
 }
 
 export async function handlerGetChirps(req: Request, res: Response) {
-  const chirpies = await getAllChipies()
+  const chirpies = await getAllChipies();
   res.status(200).json(chirpies);
 }
 
 export async function handlerGetChirp(req: Request, res: Response) {
-  const chirpId = req.params.id as string
-  const chirp = await getChirp(chirpId)
-  if(!chirp.length) {
+  const chirpId = req.params.id as string;
+  const chirp = await getChirp(chirpId);
+  if (!chirp.length) {
     return res.status(400).json({
       error: "Invalid Chirp",
     });
   }
-  res.status(200).json(chirp[0])
+  res.status(200).json(chirp[0]);
 }

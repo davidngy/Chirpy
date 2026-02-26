@@ -5,10 +5,11 @@ import { handlerMetricsReset } from "./handler/handlerMetricsReset.js";
 import { logResponses } from "./middleware/logResponses.js";
 import { middlewareMetricsInc } from "./middleware/metricsInc.js";
 import { handlerCreateChirp } from "./handler/handlerChirpy.js";
-import { handlerCreateUser } from "./handler/handlerCreateUser.js";
+import { handlerCreateUser } from "./handler/handlerUser.js";
 import { handlerGetChirps } from "./handler/handlerChirpy.js";
 import { handlerGetChirp } from "./handler/handlerChirpy.js";
 import { errorHandler } from "./middleware/errorHandler.js";
+import { handlerLogin } from "./handler/handlerAuth.js";
 import postgres from "postgres";
 import { migrate } from "drizzle-orm/postgres-js/migrator";
 import { drizzle } from "drizzle-orm/postgres-js";
@@ -42,6 +43,9 @@ app.post("/api/chirps", async (req, res, next) => {
 });
 app.post("/api/users", async (req, res, next) => {
   Promise.resolve(handlerCreateUser(req, res)).catch(next);
+});
+app.post("/api/login", async (req, res, next) => {
+  Promise.resolve(handlerLogin(req, res)).catch(next);
 });
 
 app.use(errorHandler);
