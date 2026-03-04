@@ -1,5 +1,11 @@
 import { describe, it, expect, beforeAll } from "vitest";
-import { makeJWT, validateJWT, hashPassword, checkPasswordHash } from "./auth";
+import {
+  makeJWT,
+  validateJWT,
+  hashPassword,
+  checkPasswordHash,
+  getBearerToken,
+} from "./auth";
 describe("Password Hashing", () => {
   const password1 = "correctPassword123!";
   const password2 = "anotherPassword456!";
@@ -41,5 +47,28 @@ describe("JWT functons", () => {
 
   it("should throw an error because of wrong secret", () => {
     expect(() => validateJWT(token2, "wrong")).toThrow();
+  });
+});
+
+describe("getting bearer token", () => {
+  const mockReq = {
+    get: () => "Bearer 123",
+  } as any;
+
+  const mockReq1 = {
+    get: () => "Bearer 234",
+  } as any;
+
+  const mockReq2 = {
+    get: () => undefined,
+  } as any;
+
+  it("should return the token", () => {
+    const result = getBearerToken(mockReq);
+    expect(result).toBe("Bearer 123");
+  });
+
+  it("should throw an error because of undefined content", () => {
+    expect(() => getBearerToken(mockReq2)).toThrow();
   });
 });

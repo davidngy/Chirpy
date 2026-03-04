@@ -1,7 +1,8 @@
 import { Response, Request } from "express";
 import { BadRequestError } from "../error/httpErrors.js";
 import { createChirpy, getAllChipies, getChirp } from "../db/queries/chirpy.js";
-
+import { getBearerToken, validateJWT } from "../auth.js";
+import { config } from "../config.js";
 function validateChirp(chirp: string) {
   const forbidden = ["kerfuffle", "sharbert", "fornax"];
   if (chirp.length > 140) {
@@ -23,11 +24,12 @@ function validateChirp(chirp: string) {
 export async function handlerCreateChirp(req: Request, res: Response) {
   type parameters = {
     body: string;
-    userId: string;
   };
   const params: parameters = req.body;
   const cleandeChirp = validateChirp(params.body);
-  const userId = params.userId;
+  const token = getBearerToken(req);
+  const userId = validateJWT(token, config.jwt.secret);
+
   const response = await createChirpy({ body: cleandeChirp, userId: userId });
   res.status(201).json(response);
 }

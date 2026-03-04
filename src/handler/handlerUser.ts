@@ -1,9 +1,10 @@
 import { Request, Response } from "express";
 import { createUser } from "../db/queries/users.js";
-import { hashPassword } from "../auth.js";
+import { hashPassword, makeJWT } from "../auth.js";
 import type { NewUser } from "../db/schema.js";
 import { getUserByEmail } from "../db/queries/users.js";
 import { checkPasswordHash } from "../auth.js";
+import { config } from "../config.js";
 export async function handlerCreateUser(req: Request, res: Response) {
   type parameter = {
     email: string;
@@ -34,10 +35,15 @@ export async function handlerLogin(req: Request, res: Response) {
   type parameter = {
     password: string;
     email: string;
+    expiresInSeconds?: number;
   };
   const params: parameter = req.body;
   const email = params.email;
   const passwordInput = params.password;
+  let expiresInSeconds = params.expiresInSeconds;
+  if (!expiresInSeconds) {
+    expiresInSeconds = config.jwt.defaultDuration;
+  }
   const user = await getUserByEmail(email);
   if (!user) {
     return res.status(404).json({
@@ -50,10 +56,14 @@ export async function handlerLogin(req: Request, res: Response) {
       message: "Invalid credentials",
     });
   }
+
+  const accessToken = makeJWT(user.id, expiresInSeconds, config.jwt.secret);
+
   res.status(200).json({
     id: user.id,
     createdAt: user.createdAt,
     updatedAt: user.updatedAt,
     email: user.email,
+    token: accessToken,
   });
 }

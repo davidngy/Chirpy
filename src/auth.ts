@@ -1,7 +1,9 @@
 import * as argon2 from "argon2";
 import jwt from "jsonwebtoken";
 import { JwtPayload } from "jsonwebtoken";
-import { UnauthorizedError } from "./error/httpErrors";
+import { UnauthorizedError, BadRequestError } from "./error/httpErrors.js";
+import { Request } from "express";
+import { config } from "./config.js";
 
 export async function hashPassword(password: string): Promise<string> {
   const hash = await argon2.hash(password);
@@ -33,7 +35,7 @@ export function makeJWT(
     iat: iat,
     exp: exp,
   };
-  const token = jwt.sign(payload, secret);
+  const token = jwt.sign(payload, secret, { algorithm: "HS256" });
   return token;
 }
 
@@ -47,4 +49,16 @@ export function validateJWT(tokenString: string, secret: string): string {
   } catch (error) {
     throw new UnauthorizedError("Invalid or expired token");
   }
+}
+
+export function getBearerToken(req: Request): string {
+  const bearerToken = req.get("Authorization");
+  if (!bearerToken) {
+    throw new UnauthorizedError("Authorization header missing");
+  }
+  const splitAuth = bearerToken.split(" ");
+  if (splitAuth.length < 2 || splitAuth[0] !== "Bearer") {
+    throw new BadRequestError("Malformed authorization header");
+  }
+  return splitAuth[1];
 }
