@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 import { JwtPayload } from "jsonwebtoken";
 import { UnauthorizedError, BadRequestError } from "./error/httpErrors.js";
 import { Request } from "express";
-import { config } from "./config.js";
+import { randomBytes } from "node:crypto";
 
 export async function hashPassword(password: string): Promise<string> {
   const hash = await argon2.hash(password);
@@ -61,4 +61,9 @@ export function getBearerToken(req: Request): string {
     throw new BadRequestError("Malformed authorization header");
   }
   return splitAuth[1];
+}
+
+export function makeRefreshToken(): string {
+  const token = randomBytes(32).toString("hex");
+  return token;
 }
