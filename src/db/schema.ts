@@ -21,7 +21,7 @@ export const chirpies = pgTable("chirpies", {
     .notNull()
     .defaultNow()
     .$onUpdate(() => new Date()),
-  body: varchar("body", { length: 256 }).unique().notNull(),
+  body: varchar("body", { length: 256 }).notNull(),
   userId: uuid("user_id")
     .references(() => users.id, { onDelete: "cascade" })
     .notNull(),

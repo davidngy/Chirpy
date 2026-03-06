@@ -1,1 +1,0 @@
-ALTER TABLE "users" ADD COLUMN "hashed_pw" varchar(256) DEFAULT 'unset' NOT NULL;

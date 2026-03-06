@@ -5,50 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1771429921879,
-      "tag": "0000_jittery_blink",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1771782305416,
-      "tag": "0001_majestic_black_tarantula",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1771782746275,
-      "tag": "0002_melted_senator_kelly",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "7",
-      "when": 1772028736850,
-      "tag": "0003_panoramic_devos",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "7",
-      "when": 1772632886816,
-      "tag": "0004_daily_imperial_guard",
-      "breakpoints": true
-    },
-    {
-      "idx": 5,
-      "version": "7",
-      "when": 1772634134099,
-      "tag": "0005_cool_next_avengers",
-      "breakpoints": true
-    },
-    {
-      "idx": 6,
-      "version": "7",
-      "when": 1772718823525,
-      "tag": "0006_silly_runaways",
+      "when": 1772807084030,
+      "tag": "0000_dashing_luminals",
       "breakpoints": true
     }
   ]
