@@ -1,12 +1,19 @@
 import { Request, Response } from "express";
 import { createUser } from "../db/queries/users.js";
-import { hashPassword, makeJWT } from "../auth.js";
+import {
+  getBearerToken,
+  hashPassword,
+  makeJWT,
+  checkPasswordHash,
+  validateJWT,
+} from "../auth.js";
 import type { NewUser } from "../db/schema.js";
 import { getUserByEmail } from "../db/queries/users.js";
-import { checkPasswordHash } from "../auth.js";
 import { config } from "../config.js";
-import { insertRefreshtoken } from "../db/queries/refresh.js";
+import { insertRefreshtoken, lookUpToken } from "../db/queries/refresh.js";
 import { makeRefreshToken } from "../auth.js";
+import { BadRequestError, UnauthorizedError } from "../error/httpErrors.js";
+import { updateUserCredentials } from "../db/queries/users.js";
 export async function handlerCreateUser(req: Request, res: Response) {
   type parameter = {
     email: string;
@@ -68,5 +75,33 @@ export async function handlerLogin(req: Request, res: Response) {
     email: user.email,
     token: accessToken,
     refreshToken: refreshToken,
+  });
+}
+
+export async function handlerUpdateUserCredentials(
+  req: Request,
+  res: Response,
+) {
+  type parameters = {
+    email: string;
+    password: string;
+  };
+  const body: parameters = req.body;
+  if (!body.password || !body.email) {
+    throw new BadRequestError("Missing required fields");
+  }
+  const bearerToken = getBearerToken(req);
+  const userId = validateJWT(bearerToken, config.jwt.secret);
+  const hashedPw = await hashPassword(body.password);
+  const newCredentials = await updateUserCredentials(
+    userId,
+    body.email,
+    hashedPw,
+  );
+  res.status(200).json({
+    id: newCredentials.id,
+    createdAt: newCredentials.createdAt,
+    updatedAt: newCredentials.updatedAt,
+    email: newCredentials.email,
   });
 }

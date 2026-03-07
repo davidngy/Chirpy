@@ -4,8 +4,15 @@ import { handlerMetrics } from "./handler/handlerMetrics.js";
 import { handlerMetricsReset } from "./handler/handlerMetricsReset.js";
 import { logResponses } from "./middleware/logResponses.js";
 import { middlewareMetricsInc } from "./middleware/metricsInc.js";
-import { handlerCreateChirp } from "./handler/handlerChirpy.js";
-import { handlerCreateUser, handlerLogin } from "./handler/handlerUser.js";
+import {
+  handlerCreateChirp,
+  handlerDeleteChirp,
+} from "./handler/handlerChirpy.js";
+import {
+  handlerCreateUser,
+  handlerLogin,
+  handlerUpdateUserCredentials,
+} from "./handler/handlerUser.js";
 import { handlerGetChirps } from "./handler/handlerChirpy.js";
 import { handlerGetChirp } from "./handler/handlerChirpy.js";
 import { errorHandler } from "./middleware/errorHandler.js";
@@ -35,6 +42,9 @@ app.get("/api/chirps", async (req, res, next) => {
 app.get("/api/chirps/:id", async (req, res, next) => {
   Promise.resolve(handlerGetChirp(req, res)).catch(next);
 });
+app.delete("/api/chirps/:chirpId", async (req, res, next) => {
+  Promise.resolve(handlerDeleteChirp(req, res)).catch(next);
+});
 app.post("/admin/reset", async (req, res, next) => {
   Promise.resolve(handlerMetricsReset(req, res)).catch(next);
 });
@@ -52,6 +62,9 @@ app.post("/api/refresh", async (req, res, next) => {
 });
 app.post("/api/revoke", async (req, res, next) => {
   Promise.resolve(handlerRevoke(req, res)).catch(next);
+});
+app.put("/api/users", async (req, res, next) => {
+  Promise.resolve(handlerUpdateUserCredentials(req, res)).catch(next);
 });
 
 app.use(errorHandler);
