@@ -5,6 +5,7 @@ type Config = {
   api: APIConfig;
   db: DBCOnfig;
   jwt: JWTConfig;
+  polka: PolkaConfig;
 };
 
 type APIConfig = {
@@ -23,6 +24,10 @@ type JWTConfig = {
   refreshDuration: number;
   secret: string;
   issuer: string;
+};
+
+type PolkaConfig = {
+  key: string;
 };
 
 const migrationConfig: MigrationConfig = {
@@ -53,5 +58,8 @@ export const config: Config = {
     refreshDuration: 60 * 24 * 60 * 60 * 1000,
     secret: envOrThrow("SECRET"),
     issuer: "chirpy",
+  },
+  polka: {
+    key: envOrThrow("POLKA_KEY"),
   },
 };

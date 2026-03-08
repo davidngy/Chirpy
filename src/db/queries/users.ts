@@ -32,3 +32,12 @@ export async function updateUserCredentials(
     .returning();
   return user;
 }
+
+export async function upgradeUserToChirpyRed(userId: string) {
+  const [user] = await db
+    .update(users)
+    .set({ isChirpyRed: true })
+    .where(eq(users.id, userId))
+    .returning();
+  return user;
+}

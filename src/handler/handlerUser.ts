@@ -36,6 +36,7 @@ export async function handlerCreateUser(req: Request, res: Response) {
     createdAt: response.createdAt,
     updatedAt: response.updatedAt,
     email: response.email,
+    isChirpyRed: response.isChirpyRed,
   };
   res.status(201).json(userWithoutPw);
 }
@@ -73,6 +74,7 @@ export async function handlerLogin(req: Request, res: Response) {
     createdAt: user.createdAt,
     updatedAt: user.updatedAt,
     email: user.email,
+    isChirpyRed: user.isChirpyRed,
     token: accessToken,
     refreshToken: refreshToken,
   });
@@ -103,5 +105,6 @@ export async function handlerUpdateUserCredentials(
     createdAt: newCredentials.createdAt,
     updatedAt: newCredentials.updatedAt,
     email: newCredentials.email,
+    isChirpyRed: newCredentials.isChirpyRed,
   });
 }

@@ -21,6 +21,7 @@ import postgres from "postgres";
 import { migrate } from "drizzle-orm/postgres-js/migrator";
 import { drizzle } from "drizzle-orm/postgres-js";
 import { config } from "./config.js";
+import { handlerUpgradeUserToRed } from "./handler/handlerWebhook.js";
 
 const migrationClient = postgres(config.db.url, { max: 1 });
 await migrate(drizzle(migrationClient), config.db.migrationConfig);
@@ -65,6 +66,9 @@ app.post("/api/revoke", async (req, res, next) => {
 });
 app.put("/api/users", async (req, res, next) => {
   Promise.resolve(handlerUpdateUserCredentials(req, res)).catch(next);
+});
+app.post("/api/polka/webhooks", async (req, res, next) => {
+  Promise.resolve(handlerUpgradeUserToRed(req, res)).catch(next);
 });
 
 app.use(errorHandler);

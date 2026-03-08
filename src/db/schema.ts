@@ -1,5 +1,10 @@
-import { pgTable, timestamp, varchar, uuid } from "drizzle-orm/pg-core";
-import { time } from "node:console";
+import {
+  pgTable,
+  timestamp,
+  varchar,
+  uuid,
+  boolean,
+} from "drizzle-orm/pg-core";
 
 export const users = pgTable("users", {
   id: uuid("id").primaryKey().defaultRandom(),
@@ -8,6 +13,7 @@ export const users = pgTable("users", {
     .notNull()
     .defaultNow()
     .$onUpdate(() => new Date()),
+  isChirpyRed: boolean("is_chirpy_red").notNull().default(false),
   email: varchar("email", { length: 256 }).unique().notNull(),
   hashedPw: varchar("hashed_pw", { length: 256 }).notNull().default("unset"),
 });

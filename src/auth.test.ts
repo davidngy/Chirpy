@@ -5,6 +5,7 @@ import {
   hashPassword,
   checkPasswordHash,
   getBearerToken,
+  getAPIKey,
 } from "./auth";
 describe("Password Hashing", () => {
   const password1 = "correctPassword123!";
@@ -65,10 +66,33 @@ describe("getting bearer token", () => {
 
   it("should return the token", () => {
     const result = getBearerToken(mockReq);
-    expect(result).toBe("Bearer 123");
+    expect(result).toBe("123");
   });
 
   it("should throw an error because of undefined content", () => {
     expect(() => getBearerToken(mockReq2)).toThrow();
+  });
+});
+
+describe("getting polka key", () => {
+  const mockReq = {
+    get: () => "ApiKey 123",
+  } as any;
+
+  const mockReq1 = {
+    get: () => "ApiKey 234",
+  } as any;
+
+  const mockReq2 = {
+    get: () => undefined,
+  } as any;
+
+  it("should return the ApiKey", () => {
+    const result = getAPIKey(mockReq);
+    expect(result).toBe("123");
+  });
+
+  it("should throw an error because of undefined content", () => {
+    expect(() => getAPIKey(mockReq2)).toThrow();
   });
 });
