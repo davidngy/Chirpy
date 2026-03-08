@@ -6,9 +6,9 @@ import {
 } from "../error/httpErrors.js";
 import {
   createChirpy,
-  getAllChipies,
   getChirp,
   deleteChirp,
+  getChirps,
 } from "../db/queries/chirpy.js";
 import { getBearerToken, validateJWT } from "../auth.js";
 import { config } from "../config.js";
@@ -44,7 +44,12 @@ export async function handlerCreateChirp(req: Request, res: Response) {
 }
 
 export async function handlerGetChirps(req: Request, res: Response) {
-  const chirpies = await getAllChipies();
+  let authorId = "";
+  let authorIdQuery = req.query.authorId;
+  if (typeof authorIdQuery === "string") {
+    authorId = authorIdQuery;
+  }
+  const chirpies = await getChirps(authorId);
   res.status(200).json(chirpies);
 }
 
